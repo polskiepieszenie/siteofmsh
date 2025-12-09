@@ -22,9 +22,14 @@
   </nav>
 </header>
 
-
-
-
+<main>
+      <section class="ads">
+        <h2>Объявления</h2>
+        <ul class="ads-list" id="ads">
+          
+        </ul>
+      </section>
+    </main>
 
 <footer class="footer">
   <div class="footer-content">
@@ -51,7 +56,17 @@
     <p>© 2025 MShare. Все права защищены.</p>
   </div>
 </footer>
+<ul id = "ads"></ul>
+<script>
+  const ads = JSON.parse(localStorage.getItem("ads")) || [];
+  const list = document.getElementById("ads");
 
+  ads.forEach(ad => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${ad.title}</strong><br>${ad.description}<br><em>Автор: ${ad.author}</em>`;
+    list.appendChild(li);
+  });
+</script>
 
 </body>
 </html>

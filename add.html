@@ -22,9 +22,39 @@
   </nav>
 </header>
 
+<section class="add-form">
+    <form id="adForm">
+      <input type="text" id="title" placeholder="Заголовок" required>
+      <textarea id="description" placeholder="Описание" required></textarea>
+      <input type="text" id="author" placeholder="Ваше имя" required>
+      <button type="submit">Добавить</button>
+    </form>
+  </section>
 
+<section class="ads-list">
+<h2>Ваши объявления</h2>
+<ul id="ads"></ul>
+</section>
 
+<script>
+  let ads = [];
 
+  document.getElementById("adForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const author = document.getElementById("author").value.trim();
+
+    if (title && description && author) {
+      let ads = JSON.parse(localStorage.getItem("ads")) || [];
+      ads.push({ title, description, author});
+      localStorage.setItem("ads", JSON.stringify(ads));
+      alert("Объявление добавлено!");
+      this.reset();
+      }
+  });
+</script>
 
 <footer class="footer">
   <div class="footer-content">
