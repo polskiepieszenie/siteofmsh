@@ -56,16 +56,26 @@
     <p>© 2025 MShare. Все права защищены.</p>
   </div>
 </footer>
-<ul id = "ads"></ul>
+
 <script>
+  window.addEventListener("DOMContentLoaded", () => {
   const ads = JSON.parse(localStorage.getItem("ads")) || [];
   const list = document.getElementById("ads");
 
   ads.forEach(ad => {
     const li = document.createElement("li");
-    li.innerHTML = `<strong>${ad.title}</strong><br>${ad.description}<br><em>Автор: ${ad.author}</em>`;
+    li.classList.add("ad-card");
+    li.innerHTML = `
+      <strong>${ad.title}</strong>
+      <p>${ad.description}</p>
+      <em>Автор: ${ad.author}</em>
+      <p>📞 ${ad.phone}</p>
+      <p>📧 <a href="mailto:${ad.email}">${ad.email}</a></p>
+      ${ad.image ? `<img src="${ad.image}" alt="Фото объявления">` : ""}
+    `;
     list.appendChild(li);
   });
+});
 </script>
 
 </body>

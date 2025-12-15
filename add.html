@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <title>Welcome!</title>
 </head>
-<body>
+<body class="add-page">
     <header class="header">
   <div class="logo">
     <img src="logo.png" alt="mlogo">
@@ -27,6 +27,9 @@
       <input type="text" id="title" placeholder="Заголовок" required>
       <textarea id="description" placeholder="Описание" required></textarea>
       <input type="text" id="author" placeholder="Ваше имя" required>
+      <input type="tel" id="phone" placeholder="Телефон" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="file" id="image" accept="image/*">
       <button type="submit">Добавить</button>
     </form>
   </section>
@@ -37,23 +40,56 @@
 </section>
 
 <script>
-  let ads = [];
+document.getElementById("adForm").addEventListener("submit", function(e) {
+  e.preventDefault();
 
-  document.getElementById("adForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+  const title = document.getElementById("title").value.trim();
+  const description = document.getElementById("description").value.trim();
+  const author = document.getElementById("author").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const imageFile = document.getElementById("image").files[0];
 
-    const title = document.getElementById("title").value.trim();
-    const description = document.getElementById("description").value.trim();
-    const author = document.getElementById("author").value.trim();
 
-    if (title && description && author) {
-      let ads = JSON.parse(localStorage.getItem("ads")) || [];
-      ads.push({ title, description, author});
+  if (title && description && author && phone && email) {
+    let ads = JSON.parse(localStorage.getItem("ads")) || [];
+
+    const saveAd = (imageData = null) => {
+      ads.push({ title, description, author, phone, email, image: imageData });
       localStorage.setItem("ads", JSON.stringify(ads));
       alert("Объявление добавлено!");
-      this.reset();
-      }
+      document.getElementById("adForm").reset();
+    };
+
+    if (imageFile) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        saveAd(event.target.result);
+      };
+      reader.readAsDataURL(imageFile);
+    } else {
+      saveAd();
+    }
+  }
+});
+window.addEventListener("DOMContentLoaded", () => {
+  const ads = JSON.parse(localStorage.getItem("ads")) || [];
+  const list = document.getElementById("ads");
+  ads.forEach(ad => {
+    const li = document.createElement("li");
+    li.classList.add("ad-card");
+    li.innerHTML = `
+      <<strong>${ad.title}</strong>
+      <p>${ad.description}</p>
+      <em>Автор: ${ad.author}</em>
+      <p>📞 ${ad.phone}</p>
+      <p>📧 <a href="mailto:${ad.email}">${ad.email}</a></p>
+      ${ad.image ? `<img src="${ad.image}" alt="Фото объявления">` : ""}
+    `;
+    list.appendChild(li);
   });
+});
+
 </script>
 
 <footer class="footer">
